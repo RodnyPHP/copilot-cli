@@ -1,3 +1,86 @@
+## 0.0.420 - 2026-02-27
+
+- Auto-update now also updates the binary executable, not just the JS package
+- Plugin and marketplace git repos update correctly after force-pushes and tag-based installs
+- 502 bad gateway errors are retried automatically and no longer crash the session with raw HTML output
+- Copy hint shows cmd+c in Ghostty on macOS and right-click as an alternative for all terminals
+- Type # to reference GitHub issues, pull requests and discussions
+
+## 0.0.419 - 2026-02-27
+
+- Add /chronicle command with standup, tips, and improve subcommands powered by session history (experimental)
+- Scrolling left or right no longer triggers unintended mouse button presses
+- Add Ctrl+F/Ctrl+B as page down/up shortcuts for scrolling in alt-screen views
+- Add --mouse/--no-mouse flag and mouse config to disable mouse mode in alt screen
+- Home and End keys jump to the top and bottom of the alt-screen scroll buffer
+- Add Ctrl+G keyboard shortcut for editing prompts in external editor and dismissing UI elements
+- /mcp enable works for built-in servers that were auto-disabled before configuration
+- CLI spinner stops and final agent response is visible after agent finishes work
+- AUTO theme now uses the terminal's actual ANSI color palette for more accurate colors on any terminal theme
+- MCP server env vars referenced in command, args, or cwd fields are automatically included in the server environment
+- /diagnose shows a helpful message when no session has been started yet
+- MCP server names now support dots, slashes, and @ characters, enabling npm-style names like @modelcontextprotocol/server and io.github/server
+
+## 0.0.418 - 2026-02-25
+
+🎉 Copilot CLI is now [generally available](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available) 🎉
+
+- Agent protected from accidentally killing itself
+- Remove --disable-parallel-tools-execution flag and parallel_tool_execution config option
+- Plugin agents specified as file paths in plugin.json load correctly
+
+## 0.0.417 - 2026-02-25
+
+- Add /research command for deep research with exportable reports
+- MCP servers no longer intermittently fail to load when opening a new session
+- Plugin agents and skills are available immediately after install without restarting
+- Plugin skills and commands load from custom paths declared in plugin.json
+- Alt+backspace correctly registers as backspace instead of delete
+
+## 0.0.416 - 2026-02-24
+
+- Expand `--help` content with descriptions, examples, and sorted flags
+- Block third-party MCP servers when the Copilot MCP policy does not allow them
+- Streaming response size counter updates continuously during tool calls and reasoning, and resets between requests
+- Status line automatically switches to a two-line layout on narrow terminals, keeping CWD, branch, and model info readable at any terminal width
+- Undo operations now always require confirmation
+
+## 0.0.415 - 2026-02-23
+
+- Skill files saved with a UTF-8 BOM (common on Windows editors) now load correctly instead of failing with a frontmatter parse error
+- Custom agents support the `model` field to specify which model to use, and unknown fields now warn instead of blocking agent load
+- Plan approval menu shows model-curated actions with a recommended option highlighted first, including autopilot+fleet for parallelizable work
+- Env loading indicator no longer hangs indefinitely on MCP startup error or session resume
+- Add show_file tool for presenting code and diffs to the user
+- Add env loading indicator showing skills, MCPs, plugins, ... being loaded
+- MCP tool results with giant single lines are truncated correctly
+- /plugin marketplace add and /plugin install support local paths containing spaces
+- `/mcp show` groups servers into User, Workspace, Plugins, and Built-in sections and makes all servers navigable
+- Agent now knows which model is powering it when asked
+- Ctrl+A/E cycle through visual lines in wrapped input; Home/End navigate within a visual line; Ctrl+Home/End jump to text boundaries
+
+## 0.0.414 - 2026-02-21
+
+- Explore agent can now use GitHub MCP tools when available
+- Show permission elevation dialog when accepting a plan with autopilot to prevent auto-denied tool errors
+
+## 0.0.413 - 2026-02-20
+
+- Fix issue where Copilot API URL wasn't respected
+- Display heading content from reasoning for gpt models
+- Increase LSP request timeout from 30s to 90s to reduce timeout failures
+- Fixed alt-screen timeline entries not updating when tool calls complete (particularly sub-agent calls)
+- ctrl+insert can now be used to copy selected text in the alt-screen view
+- Fix read_bash, write_bash, and stop_bash in-progress icon showing filled dot instead of empty circle
+- Enable alt-screen mode by default when running with `--experimental` flag
+- Improve code search speed in large repos
+- Session info renders in the main view footer in alt-screen mode
+- Skill files with YAML array syntax for allowed-tools now load correctly
+- Support remote plugin sources (GitHub repos and git URLs) in marketplace.json plugin entries
+- Automatically migrate users from claude-sonnet-4.5 to the current default model on startup
+- Ctrl+A, Ctrl+E, and Ctrl+U navigate to logical line boundaries (newlines) instead of visual wrap boundaries
+- Add configurable status line support to display dynamic session information via custom shell scripts
+
 ## 0.0.412 - 2026-02-19
 
 - Improve quick help accessibility: screen reader-friendly tab labels, reordered layout, and grouped `help commands` output
@@ -665,10 +748,10 @@
 ## 0.0.351 - 2025-10-24
 
 - Improved our path detection heuristic to avoid various annoying, unnecessary permissions requests:
-  - Running many standard bash/PowerShell commands that are known to be readonly (Fixes part of https://github.com/github/sweagentd/issues/7372)
-  - Commands like `npm test -- --something` in PowerShell
-  - Shell redirections like `> some_file.txt` in paths you've already granted write permissions, `> /dev/null`, and `2>&1` (Fixes https://github.com/github/copilot-cli/issues/211)
-  - Arguments to `gh api` like `gh api /repos/user/repo/ec` (Fixes https://github.com/github/copilot-cli/issues/216)
+    - Running many standard bash/PowerShell commands that are known to be readonly (Fixes part of https://github.com/github/sweagentd/issues/7372)
+    - Commands like `npm test -- --something` in PowerShell
+    - Shell redirections like `> some_file.txt` in paths you've already granted write permissions, `> /dev/null`, and `2>&1` (Fixes https://github.com/github/copilot-cli/issues/211)
+    - Arguments to `gh api` like `gh api /repos/user/repo/ec` (Fixes https://github.com/github/copilot-cli/issues/216)
 - Improved prompting for Sonnet 4.5 to reduce the number of intermediate markdown files left in the workspace
 - 👀 ...see you at [GitHub Universe](https://githubuniverse.com/)!
 
@@ -733,25 +816,25 @@
   Haiku 4.5.
   ```
 - Added a flag to augment MCP server configuration to temporarily add or override server configuration per session: `--additional-mcp-config` (fixes https://github.com/github/copilot-cli/issues/288)
-  - You can pass MCP server configuration in two ways:
-    - Inline JSON: `copilot --additional-mcp-config '{"mcpServers": {"my-tool": {...}}}'`
-    - From a file (prefix with @): `copilot --additional-mcp-config @/path/to/config.json`
-  - You can also pass the flag multiple times (later values override earlier ones): `copilot --additional-mcp-config @base.json --additional-mcp-config @overrides.json`
+    - You can pass MCP server configuration in two ways:
+        - Inline JSON: `copilot --additional-mcp-config '{"mcpServers": {"my-tool": {...}}}'`
+        - From a file (prefix with @): `copilot --additional-mcp-config @/path/to/config.json`
+    - You can also pass the flag multiple times (later values override earlier ones): `copilot --additional-mcp-config @base.json --additional-mcp-config @overrides.json`
 - Improved our prompts to ensure the agent uses Windows-style paths on Windows (fixes https://github.com/github/copilot-cli/issues/261)
 - Added a prompt for users to run `/terminal-setup` if needed to enable multi-line input
 - Various visual improvements:
-  - Added a shimmer effect to the "Thinking..." indicator
-  - Removed the box around user messages in the timeline
-  - Increased the contrast of removed intraline highlights in diffs
-  - Allow cycling through slash commands (from the bottom of the list back to the top)
-  - Aligned permission/confirmation prompts to ensure all use the same visual style
+    - Added a shimmer effect to the "Thinking..." indicator
+    - Removed the box around user messages in the timeline
+    - Increased the contrast of removed intraline highlights in diffs
+    - Allow cycling through slash commands (from the bottom of the list back to the top)
+    - Aligned permission/confirmation prompts to ensure all use the same visual style
 
 ## 0.0.342 - 2025-10-15
 
 - Overhauled our session logging format:
-  - Introduced a new session logging format that decouples how we store sessions from how we display them in the timeline. The new format is cleaner, more concise, and scalable, and will allow us to more easily implement new features down the line.
-  - New sessions are stored in `~/.copilot/session-state`
-  - Legacy sessions are stored in `~/.copilot/history-session-state` -- these will be migrated to the new format & location as you resume them from `copilot --resume`
+    - Introduced a new session logging format that decouples how we store sessions from how we display them in the timeline. The new format is cleaner, more concise, and scalable, and will allow us to more easily implement new features down the line.
+    - New sessions are stored in `~/.copilot/session-state`
+    - Legacy sessions are stored in `~/.copilot/history-session-state` -- these will be migrated to the new format & location as you resume them from `copilot --resume`
 - Enabled the Kitty protocol by default. Multi-line input is now supported via Shift+Ctrl on terminal that support the Kitty protocol. Multi-line input is also supported in VSCode and its forks by running the `/terminal-setup` command (fixes https://github.com/github/copilot-cli/issues/14)
 - Enabled non-interactive GHE logins by respecting the `GH_HOST` environment variable for PAT and `gh` authentication modes (fixes https://github.com/github/copilot-cli/issues/296)
 - Improved debug log collection convenience by adding a persistent `log_level` option in `~/.copilot/config`. Possible values: `["none", "error", "warning", "info", "debug", "all", "default"]`
@@ -776,25 +859,25 @@
 - Changed parsing of environment variables in MCP server configuration to treat the value of the `env` section as literal values (fixes https://github.com/github/copilot-cli/issues/26).
   Customers who have configured MCP Servers for use with the CLI will need to make a slight modification to their `~/.copilot/mcp-config.json`. For any servers they have added with an `env` section, they will need to go add a `$` to the start of the "value" pair of the key value pair of each entry in the env-block, so to have the values treated as references to environment variables.
 
-  For example: Before:
+    For example: Before:
 
-  ```json
-  {
-    "env": {
-      "GITHUB_ACCESS_TOKEN": "GITHUB_TOKEN"
+    ```json
+    {
+        "env": {
+            "GITHUB_ACCESS_TOKEN": "GITHUB_TOKEN"
+        }
     }
-  }
-  ```
+    ```
 
-  Before this change, the CLI would read the value of `GITHUB_TOKEN` from the environment of the CLI and set the environment variable named `GITHUB_ACCESS_TOKEN` in the MCP process to that value. With this change, `GITHUB_ACCESS_TOKEN` would now be set to the literal value `GITHUB_TOKEN`. To get the old behavior, change to this:
+    Before this change, the CLI would read the value of `GITHUB_TOKEN` from the environment of the CLI and set the environment variable named `GITHUB_ACCESS_TOKEN` in the MCP process to that value. With this change, `GITHUB_ACCESS_TOKEN` would now be set to the literal value `GITHUB_TOKEN`. To get the old behavior, change to this:
 
-  ```json
-  {
-    "env": {
-      "GITHUB_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+    ```json
+    {
+        "env": {
+            "GITHUB_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+        }
     }
-  }
-  ```
+    ```
 
 ## 0.0.339 - 2025-10-10
 
@@ -887,8 +970,8 @@
 
 - Added support for [Claude Sonnet 4.5](https://github.blog/changelog/2025-09-29-anthropic-claude-sonnet-4-5-is-in-public-preview-for-github-copilot/) and made it the default model
 - Added `/model` slash command to easily change the model (fixes https://github.com/github/copilot-cli/issues/10)
-  - `/model` will open a picker to change the model
-  - `/model <model>` will set the model to the parameter provided
+    - `/model` will open a picker to change the model
+    - `/model <model>` will set the model to the parameter provided
 - Added display of currently selected model above the input text box (Addresses feedback in https://github.com/github/copilot-cli/issues/120, https://github.com/github/copilot-cli/issues/108, )
 - Improved error messages when users provide incorrect command-line arguments. (Addresses feedback of the discoverability of non-interactive mode from https://github.com/github/copilot-cli/issues/96)
 - Changed the behavior of `Ctrl+r` to expand only recent timeline items. After running `Ctrl+r`, you can use `Ctrl+e` to expand all
